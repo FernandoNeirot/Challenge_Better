@@ -21,6 +21,12 @@ export const customerService = {
         }
         return item
       })
+      console.log(ACTION.ADD.value)
+      console.log(rowsSaved)
+      for( let item of rowsSaved.filter(element => element.action === ACTION.ADD.value)){
+        response.push(item)
+      }
+       
 
       return response
 

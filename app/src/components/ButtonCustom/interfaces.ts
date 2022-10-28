@@ -12,4 +12,5 @@ export interface Props {
   width?: string
   marginLeft?: boolean
   marginTop?: boolean
+  isIcon?: boolean
 }

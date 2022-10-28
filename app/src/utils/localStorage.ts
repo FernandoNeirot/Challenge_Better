@@ -10,14 +10,17 @@ export const setRowToPersistence = (action: string, newRow?: ICustomer, key = 'c
       case ACTION.DELETE.value:
         if(data.some(item => item.id === newRow?.id)){
             data = data.map(item => {
-                if(newRow?.id === item.id){
+              if(newRow?.id === item.id){
                     newRow.action = ACTION.DELETE.value
                   return newRow
                 }
                 return item
             })
           }else if(newRow){
-            data.push(newRow)
+            if(newRow){
+              newRow.action = ACTION.DELETE.value
+              data.push(newRow)
+            }            
           }
           
           break; 
@@ -35,12 +38,21 @@ export const setRowToPersistence = (action: string, newRow?: ICustomer, key = 'c
           data.push(newRow)
         }
         
-        break;  
+        break; 
+      case ACTION.ADD.value:                
+        if(newRow){
+          newRow.action = ACTION.ADD.value  
+          data.push(newRow)
+        }
+          
     }    
     localStorage.setItem(key,JSON.stringify(data))
   }
   else {
-    localStorage.setItem(key,JSON.stringify([newRow]))
+    if(newRow){
+      newRow.action = ACTION.ADD.value  
+      localStorage.setItem(key,JSON.stringify([newRow]))
+    }    
   }
 }
 

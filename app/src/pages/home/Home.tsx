@@ -9,8 +9,9 @@ import { ICustomer } from '../../interfaces/ICustomer'
 import { customerService } from '../../services/customerService'
 import { setRowToPersistence } from '../../utils/localStorage'
 import { columns } from './data'
+import {GrAdd} from 'react-icons/gr'
 
-import { Container, ContainerEdit } from './Home.styled'
+import { Container, ContainerEdit, IconAdd } from './Home.styled'
 
 export const Home = () => {
   const [data, setData] = useState<ICustomer[]>([])
@@ -27,12 +28,25 @@ export const Home = () => {
 
   const setNewData = (id: number | undefined) => {
     const row = getRow(id)
-    setId(row?.id)
+    setId(id)
     setFirst(row?.first ?? '')
     setLast(row?.last ?? '')
     setEmail(row?.email ?? '')
     setCompany(row?.company ?? '')
     setCountry(row?.country ?? '')    
+  }
+
+  const handleClickAdd = () => {
+    let max = 0;
+
+    for ( let numero of data ) {
+      if (max < numero.id)
+        max = numero.id;
+    }
+    console.log(max)
+    const newId = max + 1
+    setNewData(newId)
+    setAction(ACTION.ADD)
   }
 
   const handleClickEdit = (id: number) => {
@@ -46,21 +60,38 @@ export const Home = () => {
   }
 
   const handleClickSaveRow = () => {
-    const newData = data.map(item => {
-      if(item.id === id){
-        item.first=first
-        item.last=last
-        item.email=email
-        item.company=company
-        item.country=country
-      }
-      return item
-    })
-    setAction(ACTION.HIDE)
+    let newData:ICustomer[]=data
+    switch(action.value){
+      case ACTION.EDIT.value:
+        newData = newData.map(item => {
+          if(item.id === id){
+            item.first=first
+            item.last=last
+            item.email=email
+            item.company=company
+            item.country=country
+          }
+          return item
+        })
+        break
+      case ACTION.DELETE.value:
+        newData = newData.filter(item => item.id !== id)
+        break
+      case ACTION.ADD.value:
+        newData.push({
+          id: id ?? 0,
+          first,
+          last,
+          email,
+          company,
+          country
+        })
+    }
     setData(newData)   
     const row = getRow(id)
     setRowToPersistence(action.value, row)
-    ToastCustom(RESPONSE_TYPE.SUCCESS, 'Registro guardado') 
+    ToastCustom(RESPONSE_TYPE.SUCCESS, `Row ${action.value}`) 
+    setAction(ACTION.HIDE)
   }
 
   const handleClickDeleteRow = () => {
@@ -83,6 +114,15 @@ export const Home = () => {
   
   return(
   <Container>
+    <IconAdd>
+      <ButtonCustom
+        icon={<GrAdd/>}
+        onClick={handleClickAdd}
+        color='white'
+        background='#00a4b9'
+        isIcon
+      />
+    </IconAdd>
     <Table
       data={data}
       columns={columns(handleClickEdit,handleClickDelete)}
@@ -122,7 +162,7 @@ export const Home = () => {
           />
           <ButtonCustom
             label={action?.value}
-            onClick={() => action !== ACTION.DELETE ? handleClickSaveRow() : handleClickDeleteRow()}
+            onClick={handleClickSaveRow}
             background={action?.background}
           />
         </ContainerEdit>    

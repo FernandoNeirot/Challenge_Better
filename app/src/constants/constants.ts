@@ -1,4 +1,8 @@
 export const ACTION = {
+    ADD: {
+        value: 'ADD',
+        background: 'blue'
+    },
     EDIT: {
         value: 'EDIT',
         background: 'green'

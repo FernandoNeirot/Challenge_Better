@@ -9,6 +9,7 @@ export const ButtonCustom: React.FC<Props> = ({
   label,
   background = '#000',
   color = '#fff',
+  isIcon = false
 }) => {
 
   return (
@@ -16,6 +17,7 @@ export const ButtonCustom: React.FC<Props> = ({
       onClick={onClick}      
       background={background}
       color={color}
+      isIcon={isIcon}
     >
       {icon && <Icon>{icon}</Icon>}
       {label}

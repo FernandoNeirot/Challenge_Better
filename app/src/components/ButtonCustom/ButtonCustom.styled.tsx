@@ -5,17 +5,18 @@ export const Button = styled.button<Props>`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 38px;
+  height: ${ ({ isIcon }) =>  isIcon ? '100%' : '38px' };
+  width: ${ ({ isIcon }) =>  isIcon ? '100%' : '100px' };
   background-color: ${ ({ background }) =>  background };
+  border-radius: ${ ({ isIcon }) =>  isIcon ? '50%' : '8px'};
   cursor: pointer;
   color: ${ ({ color }) => color };  
   font-size: 12px;
   font-weight: 700;
-  border-radius: 8px;
   border: 1px solid #c8c8c8;
   display: flex;
   :hover {
-    box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.15);
+    box-shadow: 4px 4px 4px 0px rgba(0,0,0,0.35);
   }
   :active {
     background-color: ${ ({ background }) => background };
